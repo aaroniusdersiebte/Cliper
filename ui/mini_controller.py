@@ -1,13 +1,19 @@
 """
 Mini Controller - Kompaktes Always-on-Top Fenster für schnellen Workflow
 """
+import sys
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QFrame
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QPoint
+from PyQt6.QtCore import Qt, pyqtSignal, QPoint, QTimer
 from PyQt6.QtGui import QKeySequence, QShortcut, QMouseEvent
 
 from config import COLORS
+
+# Windows API für Fokus-Stealing
+if sys.platform == 'win32':
+    import ctypes
+    user32 = ctypes.windll.user32
 
 
 class MiniController(QWidget):
@@ -42,6 +48,7 @@ class MiniController(QWidget):
             Qt.WindowType.Tool
         )
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating, False)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setFixedWidth(280)
         self.setStyleSheet(self._get_stylesheet())
 
@@ -149,6 +156,12 @@ class MiniController(QWidget):
         layout = QHBoxLayout(bar)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(4)
+
+        # Focus Indicator
+        self.focus_indicator = QLabel("●")
+        self.focus_indicator.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 10px;")
+        self.focus_indicator.setToolTip("Grün = Fokus aktiv, Hotkeys funktionieren")
+        layout.addWidget(self.focus_indicator)
 
         # Drag Handle
         handle = QLabel("≡")
@@ -348,14 +361,41 @@ class MiniController(QWidget):
 
     def enterEvent(self, event):
         """Automatischer Fokus wenn Maus über Fenster"""
-        self.activateWindow()
-        self.setFocus()
+        self._force_focus()
         super().enterEvent(event)
+
+    def _force_focus(self):
+        """Erzwingt Fokus unter Windows"""
+        if sys.platform == 'win32':
+            hwnd = int(self.winId())
+            # Trick: Simuliere Alt-Taste um SetForegroundWindow zu erlauben
+            user32.keybd_event(0x12, 0, 0, 0)  # Alt down
+            user32.keybd_event(0x12, 0, 2, 0)  # Alt up
+            user32.SetForegroundWindow(hwnd)
+        self.activateWindow()
+        self.raise_()
+        self.setFocus(Qt.FocusReason.MouseFocusReason)
+
+    def focusInEvent(self, event):
+        """Visuelles Feedback wenn Fokus erhalten"""
+        self.focus_indicator.setStyleSheet(f"color: {COLORS['success']}; font-size: 10px;")
+        self.setStyleSheet(self._get_stylesheet().replace(
+            f"border: 1px solid {COLORS['border']};",
+            f"border: 2px solid {COLORS['accent']};"
+        ))
+        super().focusInEvent(event)
+
+    def focusOutEvent(self, event):
+        """Visuelles Feedback wenn Fokus verloren"""
+        self.focus_indicator.setStyleSheet(f"color: {COLORS['text_secondary']}; font-size: 10px;")
+        self.setStyleSheet(self._get_stylesheet())
+        super().focusOutEvent(event)
 
     # Dragging
 
     def mousePressEvent(self, event: QMouseEvent):
-        """Startet Drag"""
+        """Startet Drag und setzt Fokus"""
+        self._force_focus()
         if event.button() == Qt.MouseButton.LeftButton:
             self._drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
             event.accept()

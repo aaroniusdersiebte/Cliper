@@ -11,6 +11,7 @@
 - main.py              # Entry point, PyQt6 App
 - ui/
   - main_window.py     # Hauptfenster
+  - mini_controller.py # Floating Mini-Controller (Always-on-Top)
   - controls.py        # Player Controls
   - clip_list.py       # Clip-Listenansicht
 - data/

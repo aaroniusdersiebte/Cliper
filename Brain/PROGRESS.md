@@ -1,13 +1,14 @@
 # Progress & State
 
 ## [Current Focus]
-- Bugfixes für Filter und Marker abgeschlossen
+- Mini-Controller implementiert (Always-on-Top Fenster)
 
 ## [Pending / Todo]
 - [ ] Testen mit echten OBS Chapter-Dateien
 - [ ] EDL/XML Format-Support (optional)
 
 ## [Completed]
+- [x] Mini-Controller: Floating Always-on-Top Fenster für Workflow neben DaVinci
 - [x] Initiales Setup der Kontext-Dateien
 - [x] Chapter-Parser für OBS streamup-chapter-manager
 - [x] `load_chapters()` Funktion in clip_loader.py

@@ -15,6 +15,7 @@ from ui.controls import (
     RatingButtons, TrimControls, PlaybackControls,
     ActionButtons, NoteInput
 )
+from ui.mini_controller import MiniController
 from global_hotkeys import get_global_hotkeys
 
 
@@ -38,6 +39,9 @@ class MainWindow(QMainWindow):
 
         # Global Hotkeys
         self._global_hotkeys = get_global_hotkeys()
+
+        # Mini Controller
+        self._mini_controller = None
 
         # UI Setup
         self.setStyleSheet(STYLESHEET)
@@ -103,6 +107,14 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.filter_combo)
 
         layout.addStretch()
+
+        # Mini Controller Button
+        self.mini_ctrl_btn = QPushButton("Mini Controller")
+        self.mini_ctrl_btn.setToolTip("Öffnet kompaktes Always-on-Top Fenster")
+        self.mini_ctrl_btn.clicked.connect(self._open_mini_controller)
+        layout.addWidget(self.mini_ctrl_btn)
+
+        layout.addSpacing(8)
 
         # Global Hotkeys Toggle
         self.global_hotkey_btn = QPushButton("Global Hotkeys: AUS")
@@ -327,6 +339,47 @@ class MainWindow(QMainWindow):
             self.global_hotkey_btn.setText("Global Hotkeys: AUS")
             self.global_hotkey_btn.setStyleSheet("")
 
+    def _open_mini_controller(self):
+        """Öffnet den Mini-Controller"""
+        if self._mini_controller is None:
+            self._mini_controller = MiniController()
+            # Verbinde Signals
+            self._mini_controller.set_in_point.connect(self._on_set_in_point)
+            self._mini_controller.set_out_point.connect(self._on_set_out_point)
+            self._mini_controller.rating_changed.connect(self._on_rating_changed)
+            self._mini_controller.accept_clip.connect(self._on_accept_clip)
+            self._mini_controller.skip_clip.connect(self._on_skip_clip)
+            self._mini_controller.next_clip.connect(self._on_next_clip)
+            self._mini_controller.prev_clip.connect(self._on_prev_clip)
+            self._mini_controller.closed.connect(self._on_mini_controller_closed)
+
+        # Position: rechts neben dem Hauptfenster
+        main_geo = self.geometry()
+        self._mini_controller.move(main_geo.right() + 10, main_geo.top())
+
+        self._mini_controller.show()
+        self._update_mini_controller()
+        self.mini_ctrl_btn.setText("Mini Controller ✓")
+
+    def _on_mini_controller_closed(self):
+        """Wird aufgerufen wenn Mini-Controller geschlossen wird"""
+        self.mini_ctrl_btn.setText("Mini Controller")
+
+    def _update_mini_controller(self):
+        """Aktualisiert den Mini-Controller mit aktuellem Clip"""
+        if self._mini_controller is None or not self._mini_controller.isVisible():
+            return
+        if self._current_index < 0 or self._current_index >= len(self._clips):
+            return
+
+        clip = self._clips[self._current_index]
+        self._mini_controller.update_clip_info(
+            clip.user,
+            clip.in_point,
+            clip.out_point,
+            clip.rating.value
+        )
+
     def _check_resolve_connection(self):
         if self._resolve.connect():
             self.resolve_status.setText("● Resolve verbunden")
@@ -477,6 +530,9 @@ class MainWindow(QMainWindow):
         if filtered_index >= 0:
             self.clip_list.select_clip(filtered_index)
 
+        # Update Mini Controller
+        self._update_mini_controller()
+
     def _on_rating_changed(self, rating: int):
         if self._current_index < 0:
             return
@@ -516,6 +572,10 @@ class MainWindow(QMainWindow):
                 "Green",
                 marker_type="IN"
             )
+
+            # Update Mini Controller
+            if self._mini_controller and self._mini_controller.isVisible():
+                self._mini_controller.update_in_point(current_pos)
         else:
             print("[UI] Konnte aktuelle Position nicht lesen")
 
@@ -539,6 +599,10 @@ class MainWindow(QMainWindow):
                 "Red",
                 marker_type="OUT"
             )
+
+            # Update Mini Controller
+            if self._mini_controller and self._mini_controller.isVisible():
+                self._mini_controller.update_out_point(current_pos)
         else:
             print("[UI] Konnte aktuelle Position nicht lesen")
 

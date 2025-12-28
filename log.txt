@@ -1,0 +1,41 @@
+Es wird noch immer nicht in davinci in der timeline zu den punkten gesprungen.
+Marker sehe ich in davinci auch nicht. 
+Beim Exportieren sehe ich weiterhin nicht denk clip den ich selbst im beispiel konfiguriert habe. es ist nur eine leere timeline.
+ich nutze davinci resolve studio 20.3.1 
+
+
+
+
+========================================
+  Clip Workflow Tool
+========================================
+
+Stelle sicher dass DaVinci Resolve laeuft!
+
+Das System kann den angegebenen Pfad nicht finden.
+[Resolve] DLL-Pfad hinzugefügt: C:\Program Files\Blackmagic Design\DaVinci Resolve
+[Resolve] Script-Pfad gefunden: C:\ProgramData\Blackmagic Design\DaVinci Resolve\Support\Developer\Scripting\Modules
+[Resolve] DaVinciResolveScript Modul geladen
+[Resolve] Verbindung hergestellt!
+[Resolve] Aktuelles Projekt: Untitled Project 3
+[Playback] Springe zu 115.50s -> Timecode: 00:01:55:15
+[Playback] SetCurrentTimecode fehlgeschlagen für: 00:01:55:15
+[Playback] Springe zu 332.00s -> Timecode: 00:05:32:00
+[Playback] SetCurrentTimecode fehlgeschlagen für: 00:05:32:00
+[UI] In-Point gesetzt: 4859.30s für Clip von ViewerOne
+[Timeline] Marker gesetzt: 'IN: ViewerOne' bei Frame 145779 (4859.30s), Farbe: Green
+[UI] Out-Point gesetzt: 4919.17s für Clip von ViewerOne
+[Timeline] Marker gesetzt: 'OUT: ViewerOne' bei Frame 147575 (4919.17s), Farbe: Red
+[Playback] Springe zu 557.80s -> Timecode: 00:09:17:24
+[Playback] SetCurrentTimecode fehlgeschlagen für: 00:09:17:24
+[Playback] Springe zu 332.00s -> Timecode: 00:05:32:00
+[Playback] SetCurrentTimecode fehlgeschlagen für: 00:05:32:00
+[Playback] Springe zu 557.80s -> Timecode: 00:09:17:24
+[Playback] SetCurrentTimecode fehlgeschlagen für: 00:09:17:24
+[Timeline] Quell-Video gefunden: HERR ZOCKBOT ist zurück!.mp4
+[Timeline] Source-Clip Eigenschaften: Start=0, End=9258, FPS=30.0
+[Timeline] 1 akzeptierte Clips werden exportiert
+[Timeline] Verwendete FPS: 30.0
+[Timeline] Clip 1: in_point=4859.30s -> Frame 145779, out_point=4919.17s -> Frame 147575
+[Timeline] Clip 1/1 hinzugefügt: ViewerOne (4859.3s - 4919.2s)
+[Timeline] Export abgeschlossen: 1/1 Clips erfolgreich

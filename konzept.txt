@@ -1,0 +1,22 @@
+
+ich streame und nehme gleichzeitig auf
+wenn ich streame setzte ich oder viewer durch eine streamerbot aktion einen log auf einen zeitpunkt wenn etwas witzig was (clipe es)
+Die video Datei wird dann gemeinsam mit der clip datei gespeichert
+
+Nun möchte ich ein Tool das mir das clips schneiden teilautomatisiert
+
+Ich möchte ein Art Bewertungs system für die user die clips einsenden (werden mitgeloggt) es gibt 5 stufen ob sehr gut gut, meh, schlecht, sehr schlecht dementsprechend werden die user bepunktet
+so möchte ich dann filtern können bevor ich die clips durchsuche (also die "quallität" der filter) falls später mal zu viele leute zu viel clipen 
+Das Programm soll mich nun von clip zu clip in der timeline nehmen. Ich kann sie dann bewerten, gleich so übernehmen (standart ist clip zeitpunkt plus 30 sekunden davor) dann wird dies in eine neue timline kopiert wo alle ausgewählten clips landen
+ich kann aber auch hier gleich intuitiv simpel die länge vom clip einstellen (von wo bis wo er genau geht)
+ein clip kann natürlich auch ignoriert werden 
+bin ich fertig kann ich direkt zum nächsten hüpfen.
+sollte es möglich sein würde ich möglichst viel direkt im tool bleiben und muss garnicht viel zu davinci raus taben.
+
+wirklich wichtig ist das es ein guter flow ist und ich simpel und intuitiv meinen workflow damit erleichtere
+
+speicherformat und syntax ist mir egal
+
+
+
+
